@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import { BrowserRouter } from "react-router-dom";
-import "./App.css";
 import AppRouter from "./components/AppRouter";
-import Navbar from "./components/UI/Navbar";
+import Navbar from "./components/Navbar";
+import { useAppSelector } from "./hooks/redux";
 function App() {
-  localStorage.removeItem("auth");
-  console.log(localStorage.getItem("auth"));
+  const { isAuth } = useAppSelector((state) => state.authReducer);
   return (
     <BrowserRouter>
-      <div className="App">
-        <Navbar />
+      <div>
+        {isAuth && <Navbar />}
         <AppRouter />
       </div>
     </BrowserRouter>

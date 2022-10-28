@@ -1,37 +1,24 @@
 import React, { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../hooks/redux";
+import { FormValues } from "../models/IFormValues";
 import { userAPI } from "../services/UserService";
-import { authSlice } from "../store/reducers/AuthSlice";
-interface FormValues {
-  username?: string | undefined;
-  password?: string | undefined;
-}
+import { loginUser } from "../store/reducers/ActionCreator";
 const Login: FC = () => {
   const [inputs, setInputs] = useState<FormValues>({
     username: "",
     password: "",
   });
   const navigate = useNavigate();
-  const { setAuth } = authSlice.actions;
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const { data: users } = userAPI.useFetchAllUsersQuery(null);
   const login = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (
-      users?.find(
-        ({ username, password }) =>
-          username === inputs.username && password === inputs.password
-      )
-    ) {
-      dispatch(setAuth(true));
-      localStorage.setItem("auth", "true");
-    }
-    if (localStorage.getItem("auth") == null) {
-      localStorage.setItem("auth", "false");
-    }
-    console.log(localStorage.getItem("auth"));
+    setIsLoading(true);
+    dispatch(loginUser(inputs, users));
     setInputs({ username: "", password: "" });
+    setIsLoading(false);
   };
   return (
     <div>

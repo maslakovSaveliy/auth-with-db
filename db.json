@@ -11,34 +11,19 @@
       "id": 2
     },
     {
-      "username": "sava1",
+      "username": "sava",
       "password": "12345",
       "id": 3
     },
     {
-      "username": "sava2",
+      "username": "sava",
       "password": "12345",
       "id": 4
     },
     {
-      "username": "sas",
-      "password": "12",
+      "username": "sa",
+      "password": "21",
       "id": 5
-    },
-    {
-      "username": "sasa",
-      "password": "sasasas",
-      "id": 6
-    },
-    {
-      "username": "sasasa",
-      "password": "ssaassasas",
-      "id": 7
-    },
-    {
-      "username": "2e",
-      "password": "123",
-      "id": 8
     }
   ]
 }

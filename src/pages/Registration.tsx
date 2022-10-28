@@ -1,36 +1,24 @@
 import React, { FC, useState } from "react";
 import { userAPI } from "../services/UserService";
-import { IUser } from "../models/IUser";
 import { Link } from "react-router-dom";
-import { authSlice } from "../store/reducers/AuthSlice";
 import { useAppDispatch } from "../hooks/redux";
-interface FormValues {
-  username?: string | undefined;
-  password?: string | undefined;
-}
+import { FormValues } from "../models/IFormValues";
+import { registerUser } from "../store/reducers/ActionCreator";
 const Registration: FC = () => {
   const [inputs, setInputs] = useState<FormValues>({
     username: "",
     password: "",
   });
-  const { setAuth } = authSlice.actions;
   const dispatch = useAppDispatch();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { data: users } = userAPI.useFetchAllUsersQuery(null);
-  const [createUser, {}] = userAPI.useCreateUserMutation({});
+  const [createUser, { isSuccess }] = userAPI.useCreateUserMutation({});
   const reg = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (users?.find(({ username }) => username === inputs.username)) {
-      localStorage.setItem("auth", "false");
-    } else {
-      await createUser({
-        username: inputs?.username,
-        password: inputs?.password,
-      });
-      localStorage.setItem("auth", "true");
-      dispatch(setAuth(true));
-    }
-    console.log(localStorage.getItem("auth"));
+    setIsLoading(true);
+    await dispatch(registerUser(inputs, users, createUser, isSuccess));
     setInputs({ username: "", password: "" });
+    setIsLoading(false);
   };
   return (
     <div>
